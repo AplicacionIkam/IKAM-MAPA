@@ -25,7 +25,7 @@ const ListaPymes = ({ setPymeSeleccionada, pymesQ, setVistaDetalles }) => {
     <Link
       asChild
       href={{
-        pathname: "[pymeId]",
+        pathname: "/pyme/[pymeId]",
         params: { pymeId: item.id },
       }}
     >

@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     width: viewportWidth * 0.9,
     alignSelf: "center",
     marginVertical: 10,
-    zIndex: 1000
+    zIndex: 1001
   },
   dropDownPicker: {
     marginBottom: 15,

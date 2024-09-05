@@ -16,7 +16,7 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faUserCircle, faShieldAlt, faBell, faLock, faSignOutAlt, faGavel, faUserTimes } from "@fortawesome/free-solid-svg-icons";
 import { getUserData, clearUserData } from "@/auth/authService";
-import { useRouter } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import { doc, deleteDoc, collection, query, where, getDocs, getDoc } from 'firebase/firestore';
 import { auth, ikam } from '@/firebase/config-ikam';
 import { deleteUser } from 'firebase/auth';
@@ -76,7 +76,7 @@ export default function App() {
     return <SafeAreaView style={styles.safeArea}>
     <View style={styles.contenedorPerfil}>
       <View style={styles.contenedorPerfilColumnas}>
-        <Icon name="user-circle" size={70} color="#FFF" solid />
+        <Icon name="user-circle" size={70} color="black" solid />
         <View style={styles.textoPerfilContainer}>
           <Text style={styles.textoPerfil}>Invitado</Text>
         </View>
@@ -161,15 +161,22 @@ export default function App() {
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.contenedorPerfil}>
         <View style={styles.contenedorPerfilColumnas}>
-          <Icon name="user-circle" size={70} color="#FFF" solid />
+          <Icon name="user-circle" size={70} color="black" solid />
           <View style={styles.textoPerfilContainer}>
-            <Text style={styles.textoPerfil}>{userData.display_name + " " + userData.last_name}</Text>
+            <Text style={styles.textoPerfil}>{userData.display_name.toUpperCase() + " " + userData.last_name.toUpperCase()}</Text>
             <Text style={styles.textoCorreo}>{userData.email}</Text>
           </View>
         </View>
       </View>
       <ScrollView style={styles.contenedorOpciones}>
-        <RenderOption icon="gavel" text="Política Privacidad" onPress={() => setModalVisible(true)} />
+        <Link asChild href={"configuracion/perfil"}><RenderOption icon="user" text="Datos de la cuenta"/></Link>
+        <Link asChild href={"configuracion/perfil"}><RenderOption icon="question" text="Preguntas Frecuentes"/></Link>
+        <Link asChild href={"configuracion/perfil"}><RenderOption icon="id-card-alt" text="Contacto Ikam Multitiendas"/></Link>
+        <Text style={styles.textoSubTitulo}>Politica de ikam Multitiendas</Text>
+        <RenderOption icon="lock" text="Aviso de privacidad" onPress={() => setModalVisible(true)} />
+        <RenderOption icon="file-alt" text="Terminos y Condiciones" onPress={() => setModalVisible(true)} />
+        <Text style={styles.textoSubTitulo}>Forma parte de Ikam Multitiendas</Text>        
+        <Link asChild href={"configuracion/perfil"}><RenderOption icon="store" text="Anuncia tu Negocio"/></Link>        
         <RenderOption icon="sign-out-alt" text="Cerrar Sesión" onPress={handleSignOut} />
         <RenderOption icon="user-times" text="Eliminar Cuenta" onPress={handleDeletAccount} />
       </ScrollView>
@@ -207,7 +214,7 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
   contenedorPerfil: {
-    backgroundColor: "#222C57",
+    // backgroundColor: "#222C57",
     paddingVertical: 20,
     paddingLeft: 25,
   },
@@ -221,11 +228,11 @@ const styles = StyleSheet.create({
   textoPerfil: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#FFF",
+    color: "black",
   },
   textoCorreo: {
     fontSize: 17,
-    color: "#FFF",
+    color: "black",
   },
   contenedorOpciones: {
     paddingHorizontal: 20,
@@ -246,4 +253,11 @@ const styles = StyleSheet.create({
     color: "#888",
     marginLeft: "auto",
   },
+  textoSubTitulo: {
+    marginTop: 30,
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "black",
+    textAlign: 'center'
+  }
 });

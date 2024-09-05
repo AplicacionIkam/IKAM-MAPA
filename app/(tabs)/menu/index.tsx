@@ -8,9 +8,12 @@ import {
   BackHandler,
   Alert,
   Text,
+  Pressable,
 } from "react-native";
 
 import { StatusBar } from "expo-status-bar";
+
+import Icon from "react-native-vector-icons/FontAwesome5";
 
 import BarraBusquedaCategoriaSeleccionada from "@/components/barraBusquedaCategoriaSeleccionada";
 import { suscribirseAPymes, suscribirseACategorias } from "@/services/services";
@@ -60,11 +63,11 @@ const App = () => {
     });
     return () => unsubscribe && unsubscribe();
   }, []);
-  
+
   useEffect(() => {
     setColonia("");
   }, []);
-  
+
   useEffect(() => {
     if (categoriaSeleccionada) {
       if (categoriaSeleccionada !== "1") {
@@ -200,6 +203,32 @@ const App = () => {
             setCategoriaSeleccionada={setCategoriaSeleccionada}
             categoriaSeleccionada={categoriaSeleccionada}
           />
+          <View style={estilos.contenedorPress}>
+            <Pressable
+              onPress={() => {
+                setCategoriaSeleccionada(null);
+                setBusquedaCategoria("");
+              }}
+              style={({ pressed }) => [
+                {
+                  backgroundColor: pressed ? "rgb(210, 230, 255)" : "white",
+                },
+                estilos.wrapperCustom,
+              ]}
+            >
+              {({ pressed }) => (
+                <Text style={estilos.text}>
+                  {pressed ? "Borrar Categoria" : categoria + "   "}
+                  <Icon
+                    name={pressed ? "" : "times"}
+                    size={24}
+                    color="red"
+                    solid
+                  />
+                </Text>
+              )}
+            </Pressable>
+          </View>
           {pymes.length > 0 ? (
             <ListaPymes
               setPymeSeleccionada={setPymeSeleccionada}
@@ -244,7 +273,7 @@ const estilos = StyleSheet.create({
   },
   contenedorCategorias: {
     flex: 1,
-    paddingHorizontal: 5,
+    paddingHorizontal: 5,    
   },
   contenedorPymes: {
     flex: 1,
@@ -304,6 +333,28 @@ const estilos = StyleSheet.create({
   textoTarjeta: {
     fontSize: 18,
     color: "#333",
+  },
+  btnPressableCat: {
+    width: 115,
+    height: 35,
+    alignContent: "center",
+    alignItems: "center",
+    backgroundColor: "blue",
+    padding: 5,
+  },
+  contenedorPress: {
+    alignContent: "center",
+    alignItems: "center",
+    marginBottom: 5,
+  },
+  wrapperCustom: {
+    width: "55%",
+    padding: 6,
+    borderRadius: 8,
+  },
+  text: {
+    fontSize: 16,
+    textAlign: "center",
   },
 });
 

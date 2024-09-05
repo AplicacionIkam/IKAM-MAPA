@@ -36,7 +36,7 @@ const SplashScreen = () => {
           useNativeDriver: true,
         }),
       ]).start(() => {
-        router.replace("(tabs)");
+        router.replace("menu");
       });
     }, 500);
   };

@@ -85,7 +85,7 @@ const RegisterScreen = () => {
         name: '',
         last_name: '',
       });
-      router.push('(tabs)');
+      router.push('menu');
     } catch (error) {
       // console.log("Error como string:", error.toString());
       if (error.message.includes('auth/email-already-in-use')) {

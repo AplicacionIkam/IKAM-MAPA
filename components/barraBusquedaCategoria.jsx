@@ -79,6 +79,7 @@ const styles = StyleSheet.create({
     width: viewportWidth * 0.9,
     alignSelf: "center",
     marginVertical: 10,
+    zIndex:1001
   },
   dropDownPicker: {
     marginBottom: 15,
@@ -92,6 +93,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 2,
     elevation: 3,
+    
   },
   dropDownContainer: {
     borderColor: "#FFF",
@@ -101,6 +103,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 2,
     elevation: 3,
+    
   },
   barraBusqueda: {
     flexDirection: "row",

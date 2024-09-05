@@ -46,7 +46,7 @@ const ModalFiltro = ({ modalVisible, setModalVisible, colonia, setColonia }) => 
             <View style={estilos.modalBackground}>
                 <View style={estilos.modalView}>
                     <Text style={estilos.modalText}>Busca en la ciudad de tu agrado</Text>
-                    <View >
+                    <View style={estilos.modalDrop}>
                         <Text style={estilos.modalTextDrop}>Colonia</Text>
                         <DropDownPicker
                             open={open}
@@ -101,6 +101,7 @@ const estilos = StyleSheet.create({
         borderRadius: 20,
         padding: 20,
         elevation: 2,
+        
     },
     buttonClose: {
         marginTop: 35,
@@ -110,6 +111,9 @@ const estilos = StyleSheet.create({
         marginBottom: 15,
         textAlign: 'center',
         fontSize: 25
+    },
+    modalDrop: {
+        zIndex: 1001
     },
     modalTextDrop: {
         fontSize: 20
