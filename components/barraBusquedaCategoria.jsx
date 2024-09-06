@@ -12,31 +12,10 @@ const BarraBusquedaCategoria = ({
   setbusquedaCategoria,
   colonia,
   setColonia,
+  colonias,
+  setColonias
 }) => {
   const [open, setOpen] = useState(false);
-  const [colonias, setColonias] = useState([
-    { label: "Todas las colonias", value: "" },
-  ]);
-
-  useEffect(() => {
-    const obtenerAtributosColeccion = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(ikam, "colonia"));
-        const coloniasArray = querySnapshot.docs.map((doc) => ({
-          id: `${doc.id}-${doc.data().nombreCol}`, // Genera una clave única combinada
-          label: doc.data().nombreCol,
-          value: doc.data().nombreCol,
-        }));
-        setColonias((prevColonias) => [...prevColonias, ...coloniasArray]);
-      } catch (error) {
-        console.error(
-          "Error obteniendo los atributos de la colección 'colonia':",
-          error
-        );
-      }
-    };
-    obtenerAtributosColeccion();
-  }, []);
 
   return (
     <View style={styles.contenedorBusqueda}>
@@ -50,7 +29,7 @@ const BarraBusquedaCategoria = ({
         placeholder="Selecciona una colonia"
         style={styles.dropDownPicker}
         dropDownContainerStyle={styles.dropDownContainer}
-        keyExtractor={(item) => item.id} // Usamos el ID como clave única
+        keyExtractor={(item) => item.id}
       />
       <View style={styles.barraBusqueda}>
         <FontAwesome5 name="search" size={25} color="#222C57" />
@@ -93,7 +72,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 2,
     elevation: 3,
-    
   },
   dropDownContainer: {
     borderColor: "#FFF",
@@ -103,6 +81,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 2,
     elevation: 3,
+    
     
   },
   barraBusqueda: {
@@ -126,3 +105,29 @@ const styles = StyleSheet.create({
 });
 
 export default BarraBusquedaCategoria;
+
+  // const [colonias, setColonias] = useState([
+  //   { label: "Todas las colonias", value: "" },
+  // ]);
+
+  // useEffect(() => {
+  //   const obtenerAtributosColeccion = async () => {
+  //     try {
+  //       console.log("de nuevo")
+  //       const querySnapshot = await getDocs(collection(ikam, "colonia"));
+  //       const coloniasArray = querySnapshot.docs.map((doc) => ({
+  //         id: `${doc.id}-${doc.data().nombreCol}`, // Genera una clave única combinada
+  //         label: doc.data().nombreCol,
+  //         value: doc.data().nombreCol,
+  //       }));
+  //       setColonias((prevColonias) => [...prevColonias, ...coloniasArray]);
+  //     } catch (error) {
+  //       console.error(
+  //         "Error obteniendo los atributos de la colección 'colonia':",
+  //         error
+  //       );
+  //     }
+  //   };
+  //   obtenerAtributosColeccion();
+  // }, []);
+

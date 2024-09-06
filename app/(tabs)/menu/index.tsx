@@ -9,6 +9,9 @@ import {
   Alert,
   Text,
   Pressable,
+  Image,
+  Button,
+  TouchableOpacity,
 } from "react-native";
 
 import { StatusBar } from "expo-status-bar";
@@ -16,7 +19,11 @@ import { StatusBar } from "expo-status-bar";
 import Icon from "react-native-vector-icons/FontAwesome5";
 
 import BarraBusquedaCategoriaSeleccionada from "@/components/barraBusquedaCategoriaSeleccionada";
-import { suscribirseAPymes, suscribirseACategorias } from "@/services/services";
+import {
+  suscribirseAPymes,
+  suscribirseACategorias,
+  suscribirseAColonias,
+} from "@/services/services";
 import BarraBusquedaCategoria from "@/components/barraBusquedaCategoria";
 import BarraBusqueda from "@/components/barraBusqueda";
 import ListaCategorias from "@/components/categorias";
@@ -24,8 +31,19 @@ import ModalFiltro from "@/components/modalFiltro";
 import { Categoria } from "@/models/Categoria";
 import ListaPymes from "@/components/pymes";
 import { Pyme } from "@/models/Pyme";
+import { Stack } from "expo-router";
 
 const { width: viewportWidth } = Dimensions.get("window");
+import colorsIkam from "@/assets/estilos";
+
+function LogoTitle() {
+  return (
+    <Image
+      style={styles.image}
+      source={require("@/assets/images/ikam-logo.png")}
+    />
+  );
+}
 
 const App = () => {
   const [pymes, setPymes] = useState<Pyme[]>([]); // BD NO MODIFICAR
@@ -35,9 +53,13 @@ const App = () => {
   const [pymeSeleccionada, setPymeSeleccionada] = useState<string | null>(null);
 
   const [colonia, setColonia] = useState<string>("");
+  const [colonias, setColonias] = useState([
+    { label: "Todas las colonias", value: "" },
+  ]);
 
+  const [categoriasF, setCategoriasF] = useState<Categoria[]>([]); // BD NO MODIFICAR
   const [categorias, setCategorias] = useState<Categoria[]>([]);
-  const [categoriasF, setCategoriasF] = useState<Categoria[]>([]);
+
   const [categoria, setCategoria] = useState<string>("");
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState<
     string | null
@@ -50,76 +72,80 @@ const App = () => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
   // Obtener todas las Pymes
+  // useEffect(() => {
+  //   const unsubscribe = suscribirseAPymes(setPymes);
+  //   return () => unsubscribe && unsubscribe();
+  // }, []);
   useEffect(() => {
-    const unsubscribe = suscribirseAPymes(setPymes);
+    const unsubscribe = suscribirseAPymes((pymes) => {
+      const pymesOrdenadas = pymes.sort((a, b) =>
+        a.nombre_pyme.localeCompare(b.nombre_pyme)
+      );
+      setPymes(pymesOrdenadas);
+    });
+
     return () => unsubscribe && unsubscribe();
   }, []);
 
   // Obtener todas las Categorias
+  // useEffect(() => {
+  //   const unsubscribe = suscribirseACategorias((categorias) => {
+  //     setCategorias(categorias);
+  //     setCategoriasF(categorias); // Guardar la lista original
+  //   });
+  //   return () => unsubscribe && unsubscribe();
+  // }, []);
   useEffect(() => {
     const unsubscribe = suscribirseACategorias((categorias) => {
-      setCategorias(categorias);
-      setCategoriasF(categorias); // Guardar la lista original
+      const categoriasOrdenadas = categorias.sort((a, b) =>
+        a.nombreCat.localeCompare(b.nombreCat)
+      );
+      setCategorias(categoriasOrdenadas);
+      setCategoriasF(categoriasOrdenadas);
     });
+
     return () => unsubscribe && unsubscribe();
   }, []);
 
+  // Colonia nula por cosa de ubicacion
   useEffect(() => {
     setColonia("");
   }, []);
 
+  // Obtener todas las Colonias
   useEffect(() => {
-    if (categoriaSeleccionada) {
-      if (categoriaSeleccionada !== "1") {
-        const cat = categorias.find((cat) => cat.id === categoriaSeleccionada);
-        setCategoria(cat?.nombreCat || "");
-      } else {
-        setCategoria(categoriaSeleccionada);
-      }
-    }
-  }, [categoriaSeleccionada]);
+    const unsubscribe = suscribirseAColonias((nuevasColonias) => {
+      const coloniasOrdenadas = nuevasColonias.sort((a, b) =>
+        a.label.localeCompare(b.label)
+      );
+      setColonias((prevColonias) => [...prevColonias, ...coloniasOrdenadas]);
+    });
 
-  // Filtro por colonia y categoria
+    return () => unsubscribe && unsubscribe(); // Limpieza de la suscripción al desmontar el componente
+  }, []);
+
+  // Función para filtrar las pymes por colonia seleccionada y extraer las categorías sin duplicados
+  const filtrarCategoriasPorColonia = (colonia: any) => {
+    const pymesFiltradas = pymes.filter((pyme) => pyme.nomColonia === colonia);
+    setPymesCol(pymesFiltradas);
+    const categoriasNombres = pymesFiltradas.map(
+      (pyme) => pyme.nombreCategoria
+    );
+    const categoriasUnicas = [...new Set(categoriasNombres)];
+    const categoriasFiltradas = categoriasF.filter((categoriaF) =>
+      categoriasUnicas.includes(categoriaF.nombreCat)
+    );
+    setCategorias(categoriasFiltradas);
+  };
+
   useEffect(() => {
-    if (colonia) {
-      if (categoria && categoria !== "1") {
-        const pyme = pymes.filter(
-          (p) =>
-            p.nomColonia &&
-            typeof p.nomColonia === "string" &&
-            p.nomColonia.includes(colonia) &&
-            p.nombreCategoria &&
-            typeof p.nombreCategoria === "string" &&
-            p.nombreCategoria.includes(categoria)
-        );
-        setPymesCol(pyme);
-        setPymesQ(pyme);
-      } else {
-        const pyme = pymes.filter(
-          (p) =>
-            p.nomColonia &&
-            typeof p.nomColonia === "string" &&
-            p.nomColonia.includes(colonia)
-        );
-        setPymesCol(pyme);
-        setPymesQ(pyme);
-      }
+    if (colonia != "") {
+      filtrarCategoriasPorColonia(colonia);
     } else {
-      if (categoria && categoria !== "1") {
-        const pyme = pymes.filter(
-          (p) =>
-            p.nombreCategoria &&
-            typeof p.nombreCategoria === "string" &&
-            p.nombreCategoria.includes(categoria)
-        );
-        setPymesCol(pyme);
-        setPymesQ(pyme);
-      } else {
-        setPymesCol(pymes);
-        setPymesQ(pymes);
-      }
+      setCategorias(categoriasF);
+      setPymesCol(pymes);
     }
-  }, [colonia, pymes, categoria]);
+  }, [colonia]);
 
   // Filtro por nombre de pymes
   useEffect(() => {
@@ -133,19 +159,37 @@ const App = () => {
     }
   }, [busquedaPyme, pymesCol]);
 
-  // Filtro de categorias
+  // Filtro por nombre de Categorias
   useEffect(() => {
     if (busquedaCategoria) {
-      const categoriasFiltradas = categoriasF.filter((categoria) =>
-        categoria.nombreCat
-          .toLowerCase()
-          .includes(busquedaCategoria.toLowerCase())
+      const cat = categoriasF.filter((c) =>
+        c.nombreCat.toLowerCase().includes(busquedaCategoria.toLowerCase())
       );
-      setCategorias(categoriasFiltradas);
+      setCategorias(cat);
     } else {
       setCategorias(categoriasF);
     }
-  }, [busquedaCategoria, categoriasF]);
+  }, [busquedaCategoria]);
+
+  // Filtro por categoria
+  useEffect(() => {
+    if (categoriaSeleccionada) {
+      if (categoriaSeleccionada !== "1") {
+        const cat = categorias.find((cat) => cat.id === categoriaSeleccionada);
+        // console.log(cat?.nombreCat);
+        setCategoria(cat?.nombreCat || "");
+      } else {
+        setPymesQ(pymesCol);
+      }
+    }
+  }, [categoriaSeleccionada]);
+
+  useEffect(() => {
+    const pymesCat = pymesCol.filter((pyme) =>
+      pyme.nombreCategoria.toLowerCase().includes(categoria.toLowerCase())
+    );
+    setPymesQ(pymesCat);
+  }, [categoria]);
 
   // Manejar el evento de retroceso en Android
   useFocusEffect(
@@ -177,6 +221,22 @@ const App = () => {
   return (
     <SafeAreaView style={estilos.areaSegura}>
       <StatusBar style="light" />
+      <Stack.Screen
+        options={{
+          headerLeft: () => (
+            <TouchableOpacity style={{}} onPress={() => setCategoriaSeleccionada(null)}>
+              <Icon
+              style={{marginLeft:15}}
+                name="arrow-left"
+                size={24}
+                color={categoriaSeleccionada ? "white" : colorsIkam.rojo.backgroundColor}
+                solid
+              />              
+            </TouchableOpacity>
+          ),
+        }}
+      />
+
       {categoriaSeleccionada === null ? (
         <View style={estilos.contenedorCategorias}>
           <BarraBusquedaCategoria
@@ -184,21 +244,42 @@ const App = () => {
             setbusquedaCategoria={setBusquedaCategoria}
             colonia={colonia}
             setColonia={setColonia}
+            colonias={colonias}
+            setColonias={setColonias}
           />
           <ListaCategorias
-            setCategoriaSeleccionada={setCategoriaSeleccionada}
             categorias={categorias}
             categoriaSeleccionada={categoriaSeleccionada}
+            setCategoriaSeleccionada={setCategoriaSeleccionada}
           />
         </View>
       ) : (
         <View style={estilos.contenedorPymes}>
+          {/* {categoriaSeleccionada !== null && (
+            <Stack.Screen
+              options={{
+                headerStyle: {
+                  backgroundColor: colorsIkam.rojo.backgroundColor,
+                },
+                headerTitle: categoriaSeleccionada,
+                headerTintColor: "white",
+                headerRight: () => <LogoTitle />,                
+                headerLeft: () => (
+                  <Button
+                    onPress={() => setCategoriaSeleccionada(null)}
+                    title="Reset"
+                  />
+                ),
+                
+              }}
+            />
+          )} */}
           <BarraBusqueda
             busquedaPyme={busquedaPyme}
             setbusquedaPyme={setBusquedaPyme}
             setModalVisible={setModalVisible}
           />
-          <BarraBusquedaCategoriaSeleccionada
+          {/* <BarraBusquedaCategoriaSeleccionada
             categorias={categorias}
             setCategoriaSeleccionada={setCategoriaSeleccionada}
             categoriaSeleccionada={categoriaSeleccionada}
@@ -228,7 +309,7 @@ const App = () => {
                 </Text>
               )}
             </Pressable>
-          </View>
+          </View> */}
           {pymes.length > 0 ? (
             <ListaPymes
               setPymeSeleccionada={setPymeSeleccionada}
@@ -273,7 +354,7 @@ const estilos = StyleSheet.create({
   },
   contenedorCategorias: {
     flex: 1,
-    paddingHorizontal: 5,    
+    paddingHorizontal: 5,
   },
   contenedorPymes: {
     flex: 1,
@@ -358,4 +439,73 @@ const estilos = StyleSheet.create({
   },
 });
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  image: {
+    width: 50,
+    height: 50,
+    resizeMode: "contain",
+  },
+});
+
 export default App;
+
+// Filtro por colonia y categoria
+// useEffect(() => {
+//   if (colonia) {
+//     if (categoria && categoria !== "1") {
+//       const pyme = pymes.filter(
+//         (p) =>
+//           p.nomColonia &&
+//           typeof p.nomColonia === "string" &&
+//           p.nomColonia.includes(colonia) &&
+//           p.nombreCategoria &&
+//           typeof p.nombreCategoria === "string" &&
+//           p.nombreCategoria.includes(categoria)
+//       );
+//       setPymesCol(pyme);
+//       setPymesQ(pyme);
+//     } else {
+//       const pyme = pymes.filter(
+//         (p) =>
+//           p.nomColonia &&
+//           typeof p.nomColonia === "string" &&
+//           p.nomColonia.includes(colonia)
+//       );
+//       setPymesCol(pyme);
+//       setPymesQ(pyme);
+//     }
+//   } else {
+//     if (categoria && categoria !== "1") {
+//       const pyme = pymes.filter(
+//         (p) =>
+//           p.nombreCategoria &&
+//           typeof p.nombreCategoria === "string" &&
+//           p.nombreCategoria.includes(categoria)
+//       );
+//       setPymesCol(pyme);
+//       setPymesQ(pyme);
+//     } else {
+//       setPymesCol(pymes);
+//       setPymesQ(pymes);
+//     }
+//   }
+// }, [colonia, pymes, categoria]);
+
+// Filtro de categorias
+// useEffect(() => {
+//   if (busquedaCategoria) {
+//     const categoriasFiltradas = categoriasF.filter((categoria) =>
+//       categoria.nombreCat
+//         .toLowerCase()
+//         .includes(busquedaCategoria.toLowerCase())
+//     );
+//     setCategorias(categoriasFiltradas);
+//   } else {
+//     setCategorias(categoriasF);
+//   }
+// }, [busquedaCategoria, categoriasF]);

@@ -118,7 +118,6 @@ const estilos = StyleSheet.create({
     modalTextDrop: {
         fontSize: 20
     },
-
 });
 
 export default ModalFiltro;

@@ -24,7 +24,7 @@ const BarraBusqueda = ({ busquedaPyme, setbusquedaPyme, setModalVisible }) => {
           />
         ) : null}
       </View>
-      <FontAwesome5
+      {/* <FontAwesome5
         name="filter"
         size={25}
         color="#222C57"
@@ -33,7 +33,7 @@ const BarraBusqueda = ({ busquedaPyme, setbusquedaPyme, setModalVisible }) => {
           setModalVisible(true);
           setbusquedaPyme("");
         }}
-      />
+      /> */}
     </View>
   );
 };

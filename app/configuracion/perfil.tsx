@@ -11,7 +11,8 @@ const user = () => {
           headerStyle: {backgroundColor: colorsIkam.rojo.backgroundColor},
           headerTitle: "Datos de la cuenta",          
           headerTitleAlign: 'center',
-          headerTintColor: "white",          
+          headerTintColor: "white",   
+          headerBackTitle: "Perfil",       
           headerShown: true
         }}
       />

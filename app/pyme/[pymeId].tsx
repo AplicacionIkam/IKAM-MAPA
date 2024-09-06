@@ -192,6 +192,7 @@ const VistaDetallesPymes = () => {
           headerTitle: "Ikam Multitiendas",
           headerTintColor: "white",          
           headerRight: () => <LogoTitle />,
+          headerBackTitle: "Volver",
           headerShown: true
         }}
       />
@@ -205,9 +206,10 @@ const VistaDetallesPymes = () => {
               dotStyle={estilos.dotStyle}
               activeDotStyle={estilos.activeDotStyle}
               controlsTextStyle={estilos.controlesCarrusel}
+              style={{zIndex:5}}              
             >
-              <View style={estilos.videoContainer}>
-                <Video
+              <View style={[estilos.videoContainer, {zIndex:15}]}>
+                <Video                
                   source={{ uri: pyme.video }} // URL del video
                   style={estilos.video}
                   useNativeControls
@@ -315,13 +317,13 @@ const VistaDetallesPymes = () => {
                   </View>
                 </View>
               </TouchableOpacity>
-              <View style={estilos.mapContainer}>
+              {/* <View style={estilos.mapContainer}>
                 {mapRegion && (
                   <MapView style={estilos.map} region={mapRegion}>
                     <Marker coordinate={mapRegion} />
                   </MapView>
                 )}
-              </View>
+              </View> */}
               <View style={estilos.contenedorRedes}>
                 <Text style={estilos.descripcionRedes}>
                   También contáctanos
@@ -504,11 +506,12 @@ const estilos = StyleSheet.create({
   videoContainer: {
     width: "100%",
     height: "100%",
-    backgroundColor: "#000",
+    backgroundColor: "#000",    
   },
   video: {
-    width: "100%",
+    width: "75%",
     height: "100%",
+    alignSelf: 'center',    
   },
   mapContainer: {
     width: "100%",

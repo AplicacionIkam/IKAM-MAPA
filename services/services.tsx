@@ -45,6 +45,26 @@ export const suscribirseACategorias = (
   }
 };
 
+export const suscribirseAColonias = (callback: (colonias: any[]) => void) => {
+  try {
+    const unsubscribe = onSnapshot(
+      collection(ikam, "colonia"),
+      (querySnapshot) => {
+        const coloniasArray = querySnapshot.docs.map((doc) => ({
+          // id: `${doc.id}-${doc.data().nombreCol}`,
+          label: doc.data().nombreCol,
+          value: doc.data().nombreCol,
+        }));
+        callback(coloniasArray);
+      }
+    );
+    
+    return unsubscribe; // Devuelve la función de limpieza para cancelar la suscripción
+  } catch (error) {
+    console.error("Error suscribiéndose a las colonias:", error);
+  }
+};
+
 export const obtenerDetallesPyme = async (pymeId: string) => {
   try {
     const docRef = doc(ikam, "pyme", pymeId);
