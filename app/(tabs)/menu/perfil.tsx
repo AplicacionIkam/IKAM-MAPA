@@ -170,8 +170,8 @@ export default function App() {
       </View>
       <ScrollView style={styles.contenedorOpciones}>
         <Link asChild href={"configuracion/perfil"}><RenderOption icon="user" text="Datos de la cuenta"/></Link>
-        <Link asChild href={"configuracion/perfil"}><RenderOption icon="question" text="Preguntas Frecuentes"/></Link>
-        <Link asChild href={"configuracion/perfil"}><RenderOption icon="id-card-alt" text="Contacto Ikam Multitiendas"/></Link>
+        <Link asChild href={"configuracion/preguntas"}><RenderOption icon="question" text="Preguntas Frecuentes"/></Link>
+        <Link asChild href={"configuracion/contacto"}><RenderOption icon="id-card-alt" text="Contacto Ikam Multitiendas"/></Link>
         <Text style={styles.textoSubTitulo}>Politica de ikam Multitiendas</Text>
         <RenderOption icon="lock" text="Aviso de privacidad" onPress={() => setModalVisible(true)} />
         <RenderOption icon="file-alt" text="Terminos y Condiciones" onPress={() => setModalVisible(true)} />
