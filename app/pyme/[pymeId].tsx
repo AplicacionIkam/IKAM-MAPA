@@ -43,6 +43,7 @@ function LogoTitle() {
 const VistaDetallesPymes = () => {
   const { pymeId } = useLocalSearchParams();
   const [pyme, setPyme] = useState<Pyme | null>(null);
+  const [play, setPlay] = useState(true);
 
   const [isFavorite, setIsFavorite] = useState(false);
 
@@ -145,7 +146,7 @@ const VistaDetallesPymes = () => {
           },
         }
       );
-      console.log(`API Response: ${JSON.stringify(response.data)}`);
+      // console.log(`API Response: ${JSON.stringify(response.data)}`);
       const { results } = response.data;
       if (results.length > 0) {
         const { lat, lng } = results[0].geometry.location;
@@ -184,20 +185,23 @@ const VistaDetallesPymes = () => {
     abrirEnNavegador(url);
   };
 
+  const openChat = (item: any) => {
+    setPlay(false)
+    router.push({ pathname: "/chat/chat", params: item });
+  };
+
   return (
     <View style={estilos.areaSegura}>
       <Stack.Screen
         options={{
-          headerStyle: {backgroundColor: colorsIkam.rojo.backgroundColor},
+          headerStyle: { backgroundColor: colorsIkam.rojo.backgroundColor },
           headerTitle: "Ikam Multitiendas",
-          headerTintColor: "white",          
+          headerTintColor: "white",
           headerRight: () => <LogoTitle />,
           headerBackTitle: "Volver",
-          headerShown: true
+          headerShown: true,
         }}
       />
-
-      
 
       {pyme ? (
         <>
@@ -206,16 +210,17 @@ const VistaDetallesPymes = () => {
               dotStyle={estilos.dotStyle}
               activeDotStyle={estilos.activeDotStyle}
               controlsTextStyle={estilos.controlesCarrusel}
-              style={{zIndex:5}}              
+              style={{ zIndex: 5 }}
             >
-              <View style={[estilos.videoContainer, {zIndex:15}]}>
-                <Video                
+              <View style={[estilos.videoContainer, { zIndex: 15 }]}>
+                <Video
                   source={{ uri: pyme.video }} // URL del video
                   style={estilos.video}
                   useNativeControls
                   resizeMode={ResizeMode.CONTAIN}
-                  shouldPlay // Reproduce automáticamente
+                  shouldPlay={play} // Reproduce automáticamente
                   isLooping // Repite el video continuamente
+
                 />
               </View>
               <Image
@@ -242,10 +247,10 @@ const VistaDetallesPymes = () => {
             <View style={estilos.botonesContenedor}>
               <TouchableOpacity
                 style={estilos.botonIzquierda}
-                onPress={() => {
-                  null;
-                }}
-              ></TouchableOpacity>
+                onPress={()=>openChat(pyme)}
+              >
+                <FontAwesome5 name="comment" size={25} color="#C61919" />
+              </TouchableOpacity>
 
               {isFavorite ? (
                 <TouchableOpacity
@@ -317,13 +322,13 @@ const VistaDetallesPymes = () => {
                   </View>
                 </View>
               </TouchableOpacity>
-              {/* <View style={estilos.mapContainer}>
+              <View style={estilos.mapContainer}>
                 {mapRegion && (
                   <MapView style={estilos.map} region={mapRegion}>
                     <Marker coordinate={mapRegion} />
                   </MapView>
                 )}
-              </View> */}
+              </View>
               <View style={estilos.contenedorRedes}>
                 <Text style={estilos.descripcionRedes}>
                   También contáctanos
@@ -424,15 +429,17 @@ const estilos = StyleSheet.create({
   },
   botonIzquierda: {
     backgroundColor: "#fff",
-    borderRadius: 0,
-    padding: 0,
-    elevation: 0,
+    borderRadius: 30,
+    padding: 9,
+    elevation: 5,
+    zIndex: 15,
   },
   botonDerecha: {
     backgroundColor: "#fff",
     borderRadius: 30,
     padding: 9,
     elevation: 5,
+    zIndex: 15,
   },
   tituloDetalle: {
     fontSize: 22,
@@ -506,12 +513,12 @@ const estilos = StyleSheet.create({
   videoContainer: {
     width: "100%",
     height: "100%",
-    backgroundColor: "#000",    
+    backgroundColor: "#000",
   },
   video: {
     width: "75%",
     height: "100%",
-    alignSelf: 'center',    
+    alignSelf: "center",
   },
   mapContainer: {
     width: "100%",

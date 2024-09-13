@@ -21,7 +21,7 @@ import {
 const { width, height } = Dimensions.get("window");
 
 import { auth, ikam } from "@/firebase/config-ikam";
-import { saveUserData } from "@/auth/authService";
+import { getUserData, saveUserData } from "@/auth/authService";
 import ModalPassword from "@/components/modalPassword";
 
 const Logo = require("@/assets/img/logo_ikam.png");
@@ -52,7 +52,18 @@ const LoginScreen = () => {
 
       if (userDoc.exists()) {
         const userData = userDoc.data();
-        await saveUserData(user);
+        const combinedUserData = {
+          ...userData, // Datos del documento de Firestore
+          uid: user.uid, // Añadir el `uid` del objeto `user`
+        };
+        
+        await saveUserData(combinedUserData);
+        
+        // await saveUserData(user);
+        // Combinar el `uid` de Firebase con los datos del documento de Firestore
+        // const savedUserData = await getUserData();
+        // console.log(savedUserData);
+
         setForm({
           email: "",
           password: "",

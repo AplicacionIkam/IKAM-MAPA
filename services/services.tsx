@@ -2,6 +2,7 @@ import { addDoc, collection, doc, getDoc, getDocs, onSnapshot, Timestamp } from 
 import { ikam } from "@/firebase/config-ikam";
 import { Pyme } from "@/models/Pyme";
 import { Categoria } from "@/models/Categoria";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const suscribirseAPymes = (callback: (pymes: Pyme[]) => void) => {
   try {
@@ -132,4 +133,38 @@ export const soporte = async (asunto:any, mensaje:any, correo:any) => {
   } catch (error) {
     console.error('Error al agregar el documento:', error);
   }
+};
+
+export const listenToUserChanges = (userUID:any, setUserData:any) => {
+  const userDocRef = doc(ikam, "users", userUID);
+
+  // Escuchar los cambios en el documento del usuario
+  const unsubscribe = onSnapshot(userDocRef, async (docSnapshot) => {
+    if (docSnapshot.exists()) {
+      const userData = docSnapshot.data();
+      console.log('Datos del usuario actualizados:', userData);
+
+      // Combinar el `uid` con los datos obtenidos del documento
+      const combinedUserData = {
+        ...userData,  // Datos de Firestore
+        uid: userUID  // Añadir el UID del usuario
+      };
+
+      // Guardar los datos actualizados en AsyncStorage
+      try {
+        await AsyncStorage.setItem('userData', JSON.stringify(combinedUserData));
+        console.log('Datos del usuario guardados en AsyncStorage.');
+      } catch (error) {
+        console.error('Error al guardar los datos en AsyncStorage:', error);
+      }
+
+      // Actualizar el estado local con los datos actualizados
+      setUserData(combinedUserData);
+    } else {
+      console.log('El documento del usuario no existe.');
+    }
+  });
+
+  // Retorna la función para cancelar la suscripción (desconectar la escucha)
+  return unsubscribe;
 };
