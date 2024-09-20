@@ -58,7 +58,11 @@ const VistaDetallesPymes = () => {
   useEffect(() => {
     const fetchPymeDetails = async () => {
       const details = await obtenerDetallesPyme(pymeId as string);
-      setPyme(details);
+      const combined:Pyme = {
+        ...details, // Datos del documento de Firestore
+        id: pymeId, // Añadir el `pymeId`
+      };
+      setPyme(combined);
 
       if (details && details.direccion) {
         extractCoordinates(details.direccion);
@@ -186,8 +190,8 @@ const VistaDetallesPymes = () => {
   };
 
   const openChat = (item: any) => {
-    setPlay(false)
-    router.push({ pathname: "/chat/chat", params: item });
+    setPlay(false);
+    router.push({ pathname: "/chat/chatNuevo", params: item });
   };
 
   return (
@@ -220,7 +224,6 @@ const VistaDetallesPymes = () => {
                   resizeMode={ResizeMode.CONTAIN}
                   shouldPlay={play} // Reproduce automáticamente
                   isLooping // Repite el video continuamente
-
                 />
               </View>
               <Image
@@ -244,17 +247,17 @@ const VistaDetallesPymes = () => {
                 style={estilos.imagenDetalle}
               />
             </Carousel>
-            <View style={estilos.botonesContenedor}>
-              <TouchableOpacity
+            <View style={[estilos.botonesContenedor, {zIndex:10}]}>
+              {/* <TouchableOpacity
                 style={estilos.botonIzquierda}
-                onPress={()=>openChat(pyme)}
+                onPress={() => openChat(pyme)}
               >
                 <FontAwesome5 name="comment" size={25} color="#C61919" />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
 
               {isFavorite ? (
                 <TouchableOpacity
-                  style={estilos.botonDerecha}
+                  style={estilos.botonFlotanteI}
                   onPress={() => {
                     removeLike(pymeId);
                   }}
@@ -263,7 +266,7 @@ const VistaDetallesPymes = () => {
                 </TouchableOpacity>
               ) : (
                 <TouchableOpacity
-                  style={estilos.botonDerecha}
+                  style={estilos.botonFlotanteI}
                   onPress={() => {
                     addLike(pymeId);
                   }}
@@ -276,12 +279,11 @@ const VistaDetallesPymes = () => {
           <ScrollView>
             <View style={estilos.detalleContenedor}>
               <Text style={estilos.tituloDetalle}>{pyme.nombre_pyme}</Text>
-              <Text style={estilos.categoriaDetalle}>
+              {/* <Text style={estilos.categoriaDetalle}>
                 {pyme.nombreSubcate ? pyme.nombreSubcate : "Sin categoría"}
-              </Text>
+              </Text> */}
               <View style={estilos.descContenedor}>
-                <Text style={estilos.descTitulo}>
-                  {/* {pyme.descripcion} */}
+                <Text style={estilos.descTitulo}>                  
                   {pyme.descripcion}
                 </Text>
               </View>
@@ -386,6 +388,12 @@ const VistaDetallesPymes = () => {
               </View>
             </View>
           </ScrollView>
+          <TouchableOpacity
+            style={estilos.botonFlotante}
+            onPress={() => openChat(pyme)}
+          >
+            <FontAwesome5 name="comment" size={35} color="white" />
+          </TouchableOpacity>
         </>
       ) : (
         // <Text>Cargando...</Text>
@@ -419,28 +427,37 @@ const estilos = StyleSheet.create({
     resizeMode: "stretch",
   },
   botonesContenedor: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    // flexDirection: "row",
+    justifyContent: "flex-end",
     position: "absolute",
     top: 10,
     left: 5,
     right: 2,
     paddingHorizontal: 10,
   },
-  botonIzquierda: {
-    backgroundColor: "#fff",
+  botonFlotanteI: {
+    backgroundColor: "white",
     borderRadius: 30,
     padding: 9,
-    elevation: 5,
-    zIndex: 15,
+    elevation: 5,    
+    position: 'absolute',
+    top: 3,
+    right: 3,
   },
-  botonDerecha: {
-    backgroundColor: "#fff",
-    borderRadius: 30,
-    padding: 9,
-    elevation: 5,
-    zIndex: 15,
-  },
+  // botonIzquierda: {
+  //   backgroundColor: "#fff",
+  //   borderRadius: 30,
+  //   padding: 9,
+  //   elevation: 5,
+  //   zIndex: 15,
+  // },
+  // botonDerecha: {
+  //   backgroundColor: "#fff",
+  //   borderRadius: 30,
+  //   padding: 9,
+  //   elevation: 5,
+  //   zIndex: 15,
+  // },
   tituloDetalle: {
     fontSize: 22,
     fontWeight: "bold",
@@ -492,7 +509,7 @@ const estilos = StyleSheet.create({
   },
   contenedorRedes: {
     flexDirection: "column",
-    height: 250,
+    height: 120,
   },
   descripcionRedes: {
     fontSize: 18,
@@ -549,6 +566,16 @@ const estilos = StyleSheet.create({
     color: "white", // Blanco con opacidad
     fontSize: 75,
   },
+  botonFlotante: {
+    backgroundColor: colorsIkam.rojo.backgroundColor,
+    borderRadius: 30,
+    padding: 9,
+    elevation: 5,
+    zIndex: 15,
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+  }  
 });
 
 const styles = StyleSheet.create({
@@ -561,7 +588,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     resizeMode: "contain",
-  },
+  }  
 });
 
 export default VistaDetallesPymes;

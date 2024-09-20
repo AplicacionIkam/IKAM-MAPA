@@ -1,6 +1,8 @@
 import { router, Stack, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
+  FlatList,
+  Image,
   ScrollView,
   StyleSheet,
   Text,
@@ -8,70 +10,50 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Feather } from "@expo/vector-icons";
+import { Entypo, Feather, Ionicons } from "@expo/vector-icons";
 import colorsIkam from "@/assets/estilos";
-import { getUserData } from "@/auth/authService";
-import { User } from "@/models/User";
-import {
-  enviarMensaje,
-  suscribirseAlChat,
-  verificarYCrearChat,
-} from "@/services/services";
-
 type Mensaje = {
   user: string;
   mensaje: string;
-  timestamp: string;
+  time: string;
 };
 
 const chatNuevo = () => {
   const item = useLocalSearchParams();
-  const [loading, setLoading] = useState(true);
-  const [userData, setUserData] = useState<User | null>();
-
   const [mensajes, setMensajes] = useState<Mensaje[]>([]);
   const [mensaje, setMensaje] = useState("");
-
   const user = "1";
 
+  const men = [
+    {
+      user: "1",
+      mensaje: " hola, buenas noches",
+      time: "10:30 pm",
+    },
+    { user: "2", mensaje: "hola, buenas noches", time: "10:32 pm" },
+    { user: "2", mensaje: "En que le puedo servir", time: "10:32 pm" },
+    { user: "1", mensaje: "Quisiera saber los costos", time: "10:33 pm" },
+    { user: "2", mensaje: "Le envio nuestra lista de precios", time: "10:32 pm" },
+    { user: "1", mensaje: "Gracias", time: "10:33 pm" },
+  ];
+
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const data = await getUserData();
-        setUserData(data);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
+    setMensajes(men);
+  }, []);  
 
-    fetchUserData();
-  }, []);
-
-  useEffect(() => {
-    if (userData?.uid && item) {
-      const chatId = item.id;
-      const crearChatYEscucharMensajes = () => {       
-        const unsubscribe = suscribirseAlChat(chatId.toString(), (mensajes) => {
-          setMensajes(mensajes);
-        });
-        return () => unsubscribe && unsubscribe();
-      };
-      crearChatYEscucharMensajes();
-    }
-  }, [userData]);
-
-  const enviarMesaje = () => {
-    if (mensaje.trim() === "") return;
-    const chatId = item.id;
-    if (userData?.uid) {
-      enviarMensaje(chatId.toString(), mensaje, userData.uid);
-    }
-    setMensaje("");
+  const verDetalle = (item: any) => {
+    // router.push({ pathname: "/list/[id]", params: item });
   };
 
-  const formatearHora = (timestamp: any) => {
-    const date = timestamp.toDate(); // Convertir el Timestamp a objeto Date
-    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }); // Formato de hora
+  const enviarMesaje = () => {
+    if (mensaje == "") return;
+    // console.log(mensaje);
+    setMensajes((prevMensajes) => [
+      ...prevMensajes,
+      { user: "1", mensaje: mensaje, time: "10:50 pm" },
+    ]);
+
+    setMensaje("");
   };
 
   return (
@@ -79,34 +61,52 @@ const chatNuevo = () => {
       <Stack.Screen
         options={{
           headerStyle: { backgroundColor: colorsIkam.rojo.backgroundColor },
-          headerTitle: item.nombre ? item.nombre.toString() : "Sin nombre",
-
+          headerTitle: item.nombre_pyme.toString() + ": nuevo",
           headerTintColor: "white",
           headerBackTitle: "Volver",
           headerShown: true,
-          headerTitleAlign: "center",
+          headerTitleAlign: "center",          
         }}
       />
+      {/* <Stack.Screen
+        options={{
+          headerStyle: { backgroundColor: "blue" },
+          headerTintColor: "white",
+          headerBackTitle: "Atras",
+          headerTitle: `${item.nombre}`,
+          headerTitleAlign: "center",
+          headerRight: () => (
+            <View>
+              {item?.img && typeof item.img === "string" && (
+                <TouchableOpacity onPress={() => verDetalle(item)}>
+                  <Image
+                    source={{ uri: item.img }}
+                    style={estilos.headerImage}
+                  />
+                </TouchableOpacity>
+              )}
+            </View>
+          ),
+        }}
+      /> */}
       <View style={estilos.chatContainer}>
         <ScrollView>
           <View style={estilos.messagesContainer}>
-            <Text style={{ fontSize: 20, textAlign: "center", marginTop: 15 }}>             
-              
+            <Text style={{ fontSize: 20, textAlign: "center", marginTop: 15 }}>
+              {item.img}
             </Text>
             {mensajes.length > 0 ? (
               <View>
                 {mensajes.map((m, index) => (
                   <View>
-                    {m.user == userData?.uid ? (
+                    {m.user == "1" ? (
                       <View style={estilos.containerMensajeDerecha}>
                         <View style={estilos.messageContainerDer}>
                           <View key={index}>
                             <Text style={estilos.mensajeTexto}>
                               {m.mensaje}
                             </Text>
-                            <Text style={estilos.mensajeHora}>
-                              {formatearHora(m.timestamp)}
-                            </Text>
+                            <Text style={estilos.mensajeHora}>{m.time}</Text>
                           </View>
                         </View>
                       </View>
@@ -117,9 +117,7 @@ const chatNuevo = () => {
                             <Text style={estilos.mensajeTexto}>
                               {m.mensaje}
                             </Text>
-                            <Text style={estilos.mensajeHora}>
-                              {formatearHora(m.timestamp)}
-                            </Text>
+                            <Text style={estilos.mensajeHora}>{m.time}</Text>
                           </View>
                         </View>
                       </View>

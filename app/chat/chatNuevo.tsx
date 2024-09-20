@@ -12,11 +12,7 @@ import { Feather } from "@expo/vector-icons";
 import colorsIkam from "@/assets/estilos";
 import { getUserData } from "@/auth/authService";
 import { User } from "@/models/User";
-import {
-  enviarMensaje,
-  suscribirseAlChat,
-  verificarYCrearChat,
-} from "@/services/services";
+import { enviarMensaje, suscribirseAlChat, verificarYCrearChat } from "@/services/services";
 
 type Mensaje = {
   user: string;
@@ -48,39 +44,57 @@ const chatNuevo = () => {
   }, []);
 
   useEffect(() => {
-    if (userData?.uid && item) {
-      const chatId = item.id;
-      const crearChatYEscucharMensajes = () => {       
-        const unsubscribe = suscribirseAlChat(chatId.toString(), (mensajes) => {
+    if (userData?.uid) {      
+      const chatId = `${userData.uid}-${item.id}`;
+      const pyme = item.id.toString();
+
+      const crearChatYEscucharMensajes = async () => {        
+        await verificarYCrearChat(chatId, userData.uid, pyme);        
+        
+        const unsubscribe = suscribirseAlChat(chatId, (mensajes) => {          
           setMensajes(mensajes);
-        });
+        });        
         return () => unsubscribe && unsubscribe();
       };
       crearChatYEscucharMensajes();
     }
+
   }, [userData]);
 
   const enviarMesaje = () => {
     if (mensaje.trim() === "") return;
-    const chatId = item.id;
+    const chatId = userData?.uid + "-" + item.id;
     if (userData?.uid) {
-      enviarMensaje(chatId.toString(), mensaje, userData.uid);
+      enviarMensaje(chatId, mensaje, userData.uid);
     }
     setMensaje("");
   };
 
   const formatearHora = (timestamp: any) => {
     const date = timestamp.toDate(); // Convertir el Timestamp a objeto Date
-    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }); // Formato de hora
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Formato de hora
   };
+
+  // useEffect(() => {
+  //   if (userData?.uid && item.id) {
+  //     const chatId = userData.uid + "-" + item.id;
+  //     console.log("Chat ID generado:", chatId);
+
+  //     const unsubscribe = suscribirseAlChat(chatId, (mensajes) => {
+  //       console.log("Mensajes recibidos:", mensajes);
+  //       setMensajes(mensajes);
+  //     });
+
+  //     return () => unsubscribe && unsubscribe();
+  //   }
+  // }, [userData]);
 
   return (
     <View style={estilos.container}>
       <Stack.Screen
         options={{
           headerStyle: { backgroundColor: colorsIkam.rojo.backgroundColor },
-          headerTitle: item.nombre ? item.nombre.toString() : "Sin nombre",
-
+          headerTitle: item.nombre_pyme.toString(),
           headerTintColor: "white",
           headerBackTitle: "Volver",
           headerShown: true,
@@ -90,9 +104,7 @@ const chatNuevo = () => {
       <View style={estilos.chatContainer}>
         <ScrollView>
           <View style={estilos.messagesContainer}>
-            <Text style={{ fontSize: 20, textAlign: "center", marginTop: 15 }}>             
-              
-            </Text>
+            
             {mensajes.length > 0 ? (
               <View>
                 {mensajes.map((m, index) => (
@@ -104,9 +116,7 @@ const chatNuevo = () => {
                             <Text style={estilos.mensajeTexto}>
                               {m.mensaje}
                             </Text>
-                            <Text style={estilos.mensajeHora}>
-                              {formatearHora(m.timestamp)}
-                            </Text>
+                            <Text style={estilos.mensajeHora}>{formatearHora(m.timestamp)}</Text>
                           </View>
                         </View>
                       </View>
@@ -117,9 +127,7 @@ const chatNuevo = () => {
                             <Text style={estilos.mensajeTexto}>
                               {m.mensaje}
                             </Text>
-                            <Text style={estilos.mensajeHora}>
-                              {formatearHora(m.timestamp)}
-                            </Text>
+                            <Text style={estilos.mensajeHora}>{formatearHora(m.timestamp)}</Text>
                           </View>
                         </View>
                       </View>
