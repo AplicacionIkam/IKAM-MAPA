@@ -8,8 +8,9 @@ import {
   View,
 } from "react-native";
 import { Link, router } from "expo-router";
+import colorsIkam from "@/assets/estilos";
 
-const Chatlist = ({ users }) => {
+const Chatlist = ({ users, user }) => {
   const openChat = (item: any) => {
     router.push({ pathname: "/chat/chat", params: item });
   };
@@ -21,36 +22,51 @@ const Chatlist = ({ users }) => {
           style={estilos.touchable}
           onPress={() => openChat(item)}
         >
-          <Image source={{ uri: item.img }} style={estilos.tarjetaImg} />
+          {item.img ? (
+            <View>
+              <Image source={{ uri: item.img }} style={estilos.tarjetaImg} />
+            </View>
+          ) : (
+            <View style={estilos.circle}>
+              <Text style={estilos.text}>{item.nombre[0]}</Text>
+            </View>
+          )}
+
           <View style={estilos.textContainer}>
             <View style={estilos.headerContainer}>
               <Text style={estilos.nameText}>{item.nombre}</Text>
-              <Text style={estilos.timeText}>
-                {item.hora
-                  ? new Date(item.hora.seconds * 1000).toLocaleDateString([], {
-                      day: "2-digit",
-                      month: "2-digit",
-                      year: "numeric",
-                    }) +
-                    " " +
-                    new Date(item.hora.seconds * 1000).toLocaleTimeString([], {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })
-                  : ""}
-              </Text>
             </View>
-            <Text style={estilos.messageText}>{item.ultimoMensaje}</Text>
+            {item.user == user ? (
+              <View>                
+                <Text style={estilos.messageText}>Tu: {item.ultimoMensaje}</Text>
+              </View>
+            ) : (
+              <Text style={estilos.messageTextOtros}>{item.ultimoMensaje}</Text>
+            )}
+            <Text style={estilos.timeText}>
+              {item.hora
+                ? new Date(item.hora.seconds * 1000).toLocaleDateString([], {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                  }) +
+                  " " +
+                  new Date(item.hora.seconds * 1000).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })
+                : ""}
+            </Text>
           </View>
         </TouchableOpacity>
       </View>
     );
   };
 
-  const chatsFiltrados = users.filter((user: any) => user.ultimoMensaje);  
+  const chatsFiltrados = users.filter((user: any) => user.ultimoMensaje);
 
   const chatsOrdenados = chatsFiltrados.sort(
-    (a:any, b:any) =>
+    (a: any, b: any) =>
       new Date(b.hora.seconds * 1000).getTime() -
       new Date(a.hora.seconds * 1000).getTime()
   );
@@ -85,6 +101,19 @@ const estilos = StyleSheet.create({
     width: 50,
     borderRadius: 25,
   },
+  circle: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: colorsIkam.azul.backgroundColor,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  text: {
+    color: "white",
+    fontSize: 25,
+    fontWeight: "bold",
+  },
   textContainer: {
     flex: 1,
     gap: 4,
@@ -98,9 +127,13 @@ const estilos = StyleSheet.create({
   },
   timeText: {
     color: "#888",
+    textAlign: "right",
   },
   messageText: {
     color: "#555",
+  },
+  messageTextOtros: {
+    color: colorsIkam.azulTex.color,
   },
 });
 

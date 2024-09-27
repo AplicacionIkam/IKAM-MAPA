@@ -38,6 +38,7 @@ import { auth, ikam } from "@/firebase/config-ikam";
 import { deleteUser } from "firebase/auth";
 import { listenToUserChanges } from "@/services/services";
 import { User } from "@/models/User";
+import colorsIkam from "@/assets/estilos";
 
 export default function App() {
   const router = useRouter();
@@ -66,7 +67,7 @@ export default function App() {
     };
 
     fetchUserData();
-  }, []);  
+  }, []);
 
   useEffect(() => {
     library.add(
@@ -192,7 +193,12 @@ export default function App() {
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.contenedorPerfil}>
         <View style={styles.contenedorPerfilColumnas}>
-          <Icon name="user-circle" size={70} color="black" solid />
+          {/* <Icon name="user-circle" size={70} color="black" solid /> */}
+          <View style={styles.circle}>
+            <Text style={styles.text}>{userData.display_name.toUpperCase()[0] +
+                "" +
+                userData.last_name.toUpperCase()[0]}</Text>
+          </View>
           <View style={styles.textoPerfilContainer}>
             <Text style={styles.textoPerfil}>
               {userData.display_name.toUpperCase() +
@@ -205,13 +211,21 @@ export default function App() {
       </View>
       <ScrollView style={styles.contenedorOpciones}>
         <Link asChild href={"/configuracion/perfil"}>
-          <RenderOption icon="user" text="Datos de la cuenta" onPress={null}/>
+          <RenderOption icon="user" text="Datos de la cuenta" onPress={null} />
         </Link>
         <Link asChild href={"/configuracion/preguntas"}>
-          <RenderOption icon="question" text="Preguntas Frecuentes" onPress={null}/>
+          <RenderOption
+            icon="question"
+            text="Preguntas Frecuentes"
+            onPress={null}
+          />
         </Link>
         <Link asChild href={"/configuracion/contacto"}>
-          <RenderOption icon="id-card-alt" text="Contacto Ikam Multitiendas" onPress={null}/>
+          <RenderOption
+            icon="id-card-alt"
+            text="Contacto Ikam Multitiendas"
+            onPress={null}
+          />
         </Link>
         <Text style={styles.textoSubTitulo}>Politica de ikam Multitiendas</Text>
         {/* <RenderOption
@@ -282,6 +296,19 @@ const styles = StyleSheet.create({
   contenedorPerfilColumnas: {
     flexDirection: "row",
     alignItems: "center",
+  },
+  circle: {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    backgroundColor: colorsIkam.azul.backgroundColor,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  text: {
+    color: 'white',
+    fontSize: 24,
+    fontWeight: 'bold',
   },
   textoPerfilContainer: {
     marginLeft: 20,

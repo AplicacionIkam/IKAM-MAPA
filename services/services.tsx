@@ -16,6 +16,7 @@ import { Pyme } from "@/models/Pyme";
 import { Categoria } from "@/models/Categoria";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import user from "@/app/configuracion/perfil";
+import { User } from "@/models/User";
 
 export const suscribirseAPymes = (callback: (pymes: Pyme[]) => void) => {
   try {
@@ -249,6 +250,26 @@ export const suscribirseAChats = (
   }
 };
 
+// Función para suscribirse a los chats del usuario pyme
+export const suscribirseAChatsPyme = (
+  userId: string,
+  callback: (chats: any[]) => void
+) => {
+  try {
+    const q = query(collection(ikam, "chat"), where("idPyme", "==", userId));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const chatsArray = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      callback(chatsArray);
+    });
+    return unsubscribe;
+  } catch (error) {
+    console.error("Error suscribiéndose a los chats de pyme:", error);
+  }
+};
+
 export const enviarMensaje = async (
   chatId: string,
   mensaje: string,
@@ -283,4 +304,36 @@ export const suscribirseAMensajes = (chatId: any, callback: any) => {
 
     callback(mensajes);
   });
+};
+
+export const suscribirseAMensajesPyme = (chatId: any, callback: any) => {  
+  const mensajesRef = collection(ikam, "chat", chatId, "mensaje");
+  const q = query(mensajesRef, orderBy("timestamp"));  
+  return onSnapshot(q, (querySnapshot) => {
+    const mensajes = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    callback(mensajes);
+  });
+};
+
+export const suscribirseAUser = (callback: (user: User[]) => void) => {
+  try {
+    const unsubscribe = onSnapshot(
+      collection(ikam, "users"),
+      (querySnapshot) => {
+        const usersArray = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        })) as User[];
+        callback(usersArray);
+      }
+    );
+
+    return unsubscribe; // Devuelve la función de limpieza
+  } catch (error) {
+    console.error("Error suscribiéndose a los usuarios:", error);
+  }
 };

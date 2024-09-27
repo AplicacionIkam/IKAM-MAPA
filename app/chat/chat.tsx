@@ -129,7 +129,7 @@ const chatNuevo = () => {
               </View>
             ) : (
               <View>
-                <Text>No hay mensajes todavia</Text>
+                {/* <Text>No hay mensajes todavia</Text> */}
               </View>
             )}
           </View>

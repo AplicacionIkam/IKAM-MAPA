@@ -12,7 +12,11 @@ import { Feather } from "@expo/vector-icons";
 import colorsIkam from "@/assets/estilos";
 import { getUserData } from "@/auth/authService";
 import { User } from "@/models/User";
-import { enviarMensaje, suscribirseAlChat, verificarYCrearChat } from "@/services/services";
+import {
+  enviarMensaje,
+  suscribirseAlChat,
+  verificarYCrearChat,
+} from "@/services/services";
 
 type Mensaje = {
   user: string;
@@ -44,21 +48,20 @@ const chatNuevo = () => {
   }, []);
 
   useEffect(() => {
-    if (userData?.uid) {      
+    if (userData?.uid) {
       const chatId = `${userData.uid}-${item.id}`;
       const pyme = item.id.toString();
 
-      const crearChatYEscucharMensajes = async () => {        
-        await verificarYCrearChat(chatId, userData.uid, pyme);        
-        
-        const unsubscribe = suscribirseAlChat(chatId, (mensajes) => {          
+      const crearChatYEscucharMensajes = async () => {
+        await verificarYCrearChat(chatId, userData.uid, pyme);
+
+        const unsubscribe = suscribirseAlChat(chatId, (mensajes) => {
           setMensajes(mensajes);
-        });        
+        });
         return () => unsubscribe && unsubscribe();
       };
       crearChatYEscucharMensajes();
     }
-
   }, [userData]);
 
   const enviarMesaje = () => {
@@ -72,7 +75,7 @@ const chatNuevo = () => {
 
   const formatearHora = (timestamp: any) => {
     const date = timestamp.toDate(); // Convertir el Timestamp a objeto Date
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Formato de hora
+    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }); // Formato de hora
   };
 
   // useEffect(() => {
@@ -104,7 +107,9 @@ const chatNuevo = () => {
       <View style={estilos.chatContainer}>
         <ScrollView>
           <View style={estilos.messagesContainer}>
-            
+            <Text
+              style={{ fontSize: 20, textAlign: "center", marginTop: 15 }}
+            ></Text>
             {mensajes.length > 0 ? (
               <View>
                 {mensajes.map((m, index) => (
@@ -116,7 +121,9 @@ const chatNuevo = () => {
                             <Text style={estilos.mensajeTexto}>
                               {m.mensaje}
                             </Text>
-                            <Text style={estilos.mensajeHora}>{formatearHora(m.timestamp)}</Text>
+                            <Text style={estilos.mensajeHora}>
+                              {formatearHora(m.timestamp)}
+                            </Text>
                           </View>
                         </View>
                       </View>
@@ -127,7 +134,9 @@ const chatNuevo = () => {
                             <Text style={estilos.mensajeTexto}>
                               {m.mensaje}
                             </Text>
-                            <Text style={estilos.mensajeHora}>{formatearHora(m.timestamp)}</Text>
+                            <Text style={estilos.mensajeHora}>
+                              {formatearHora(m.timestamp)}
+                            </Text>
                           </View>
                         </View>
                       </View>
@@ -136,9 +145,7 @@ const chatNuevo = () => {
                 ))}
               </View>
             ) : (
-              <View>
-                <Text>No hay mensajes todavia</Text>
-              </View>
+              <View>{/* <Text>No hay mensajes todavia</Text> */}</View>
             )}
           </View>
         </ScrollView>

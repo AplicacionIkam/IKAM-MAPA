@@ -28,6 +28,8 @@ import { auth, ikam } from "@/firebase/config-ikam";
 import { obtenerDetallesPyme } from "@/services/services";
 import { Pyme } from "@/models/Pyme";
 import colorsIkam from "@/assets/estilos";
+import { User } from "@/models/User";
+import { getUserData } from "@/auth/authService";
 
 const GOOGLE_MAPS_API_KEY = "AIzaSyB_4HimG5-kkuSiz8dOoIgi6n_myRZcxVo";
 
@@ -47,6 +49,21 @@ const VistaDetallesPymes = () => {
 
   const [isFavorite, setIsFavorite] = useState(false);
 
+  const [userData, setUserData] = useState<User | null>(null);
+
+  // Datos del Usuario
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const data = await getUserData();
+        setUserData(data);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+    fetchUserData();
+  }, []);
+
   // Hook mapa
   const [mapRegion, setMapRegion] = useState<{
     latitude: number;
@@ -58,7 +75,7 @@ const VistaDetallesPymes = () => {
   useEffect(() => {
     const fetchPymeDetails = async () => {
       const details = await obtenerDetallesPyme(pymeId as string);
-      const combined:Pyme = {
+      const combined: Pyme = {
         ...details, // Datos del documento de Firestore
         id: pymeId, // Añadir el `pymeId`
       };
@@ -247,7 +264,7 @@ const VistaDetallesPymes = () => {
                 style={estilos.imagenDetalle}
               />
             </Carousel>
-            <View style={[estilos.botonesContenedor, {zIndex:10}]}>
+            <View style={[estilos.botonesContenedor, { zIndex: 10 }]}>
               {/* <TouchableOpacity
                 style={estilos.botonIzquierda}
                 onPress={() => openChat(pyme)}
@@ -283,9 +300,7 @@ const VistaDetallesPymes = () => {
                 {pyme.nombreSubcate ? pyme.nombreSubcate : "Sin categoría"}
               </Text> */}
               <View style={estilos.descContenedor}>
-                <Text style={estilos.descTitulo}>                  
-                  {pyme.descripcion}
-                </Text>
+                <Text style={estilos.descTitulo}>{pyme.descripcion}</Text>
               </View>
 
               <View style={estilos.descripcionContenedor}>
@@ -388,12 +403,14 @@ const VistaDetallesPymes = () => {
               </View>
             </View>
           </ScrollView>
-          <TouchableOpacity
-            style={estilos.botonFlotante}
-            onPress={() => openChat(pyme)}
-          >
-            <FontAwesome5 name="comment" size={35} color="white" />
-          </TouchableOpacity>
+          {userData && userData.pyme != pymeId &&(
+            <TouchableOpacity
+              style={estilos.botonFlotante}
+              onPress={() => openChat(pyme)}
+            >
+              <FontAwesome5 name="comment" size={35} color="white" />
+            </TouchableOpacity>
+          )}
         </>
       ) : (
         // <Text>Cargando...</Text>
@@ -439,8 +456,8 @@ const estilos = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 30,
     padding: 9,
-    elevation: 5,    
-    position: 'absolute',
+    elevation: 5,
+    position: "absolute",
     top: 3,
     right: 3,
   },
@@ -572,10 +589,10 @@ const estilos = StyleSheet.create({
     padding: 9,
     elevation: 5,
     zIndex: 15,
-    position: 'absolute',
+    position: "absolute",
     bottom: 20,
     right: 20,
-  }  
+  },
 });
 
 const styles = StyleSheet.create({
@@ -588,7 +605,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     resizeMode: "contain",
-  }  
+  },
 });
 
 export default VistaDetallesPymes;
