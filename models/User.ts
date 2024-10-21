@@ -8,6 +8,9 @@ export interface User {
     phone_number: string;
     photo_url: string;
     uid: string;
+<<<<<<< HEAD
     pyme: string;
     id:string;
+=======
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
   };

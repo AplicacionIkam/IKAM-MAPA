@@ -14,7 +14,11 @@ import { Stack } from 'expo-router';
 import colorsIkam from "@/assets/estilos";
 import { doc, updateDoc, getDoc } from 'firebase/firestore';
 import { auth, ikam } from '@/firebase/config-ikam';
+<<<<<<< HEAD
 // import * as ImagePicker from 'expo-image-picker';
+=======
+import * as ImagePicker from 'expo-image-picker';
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
 import Icon from "react-native-vector-icons/FontAwesome5";
 
 // Cambiar el valor por defecto a una cadena vacía para que no se muestre una imagen predeterminada
@@ -47,7 +51,11 @@ const UserProfile = () => {
         
         if (userDoc.exists()) {
           const data = userDoc.data();
+<<<<<<< HEAD
           // console.log('User data:', data);
+=======
+          console.log('User data:', data);
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
           const fetchedData = {
             name: data.display_name || '',
             lastName: data.last_name || '',
@@ -63,6 +71,7 @@ const UserProfile = () => {
           setImageUri(fetchedData.photoUrl); // Mostrar la foto del usuario si existe
           setInitialData(fetchedData); 
         } else {
+<<<<<<< HEAD
           // console.log('No such document!');
           setError('No se encontró el documento del usuario.');
         }
@@ -72,12 +81,24 @@ const UserProfile = () => {
       }
     } catch (err) {
       // console.error('Error fetching user data:', err);
+=======
+          console.log('No such document!');
+          setError('No se encontró el documento del usuario.');
+        }
+      } else {
+        console.log('No user is signed in.');
+        setError('No hay un usuario autenticado.');
+      }
+    } catch (err) {
+      console.error('Error fetching user data:', err);
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
       setError('Error fetching user data');
     } finally {
       setLoading(false);
     }
   };
 
+<<<<<<< HEAD
   // // Función para manejar la selección de imagen
   // const pickImage = async () => {
   //   let result = await ImagePicker.launchImageLibraryAsync({
@@ -92,6 +113,22 @@ const UserProfile = () => {
   //     setPhotoUrl(result.uri); // Actualiza el URL de la imagen para el almacenamiento local
   //   }
   // };
+=======
+  // Función para manejar la selección de imagen
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setImageUri(result.uri); // Actualiza el URI de la imagen seleccionada
+      setPhotoUrl(result.uri); // Actualiza el URL de la imagen para el almacenamiento local
+    }
+  };
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
 
 
   const handleUpdate = async () => {
@@ -175,9 +212,15 @@ const UserProfile = () => {
         }}
       />
       <View style={styles.profileContainer}>
+<<<<<<< HEAD
         {/* <TouchableOpacity onPress={pickImage}>
           <Image source={{ uri: imageUri }} style={styles.profileImage} />
         </TouchableOpacity> */}
+=======
+        <TouchableOpacity onPress={pickImage}>
+          <Image source={{ uri: imageUri }} style={styles.profileImage} />
+        </TouchableOpacity>
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
         <Text style={styles.header}>Perfil del Usuario</Text>
         <View style={styles.formGroup}>
           <Text style={styles.label}>Nombre:</Text>
@@ -195,7 +238,11 @@ const UserProfile = () => {
             onChangeText={setLastName}
           />
         </View>
+<<<<<<< HEAD
         {/* <View style={styles.formGroup}>
+=======
+        <View style={styles.formGroup}>
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
           <Text style={styles.label}>Edad:</Text>
           <TextInput
             style={styles.input}
@@ -203,7 +250,11 @@ const UserProfile = () => {
             onChangeText={setAge}
             keyboardType="numeric"
           />
+<<<<<<< HEAD
         </View> */}
+=======
+        </View>
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
         <View style={styles.formGroup}>
           <Text style={styles.label}>Correo Electrónico:</Text>
           <View style={styles.emailContainer}>
@@ -295,4 +346,8 @@ const styles = StyleSheet.create({
   },
 });
 
+<<<<<<< HEAD
 export default UserProfile;
+=======
+export default UserProfile;
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e

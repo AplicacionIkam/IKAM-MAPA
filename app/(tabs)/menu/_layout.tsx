@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { type ComponentProps } from "react";
 import { Image, StyleSheet } from "react-native";
 import { Tabs } from "expo-router";
@@ -20,6 +21,22 @@ const createTabBarIcon = (focusedName: IoniconsName, unfocusedName: IoniconsName
   ({ color, focused }: { color: string; focused: boolean }) => (
     <TabBarIcon name={focused ? focusedName : unfocusedName} color={color} />
 );
+=======
+import { TabBarIcon } from "@/components/navigation/TabBarIcon";
+import { Tabs } from "expo-router";
+import React from "react";
+import { Image, StyleSheet } from "react-native";
+import colorsIkam from "@/assets/estilos";
+
+function LogoTitle() {
+  return (
+    <Image
+      style={styles.image}
+      source={require("@/assets/images/ikam-logo.png")}
+    />
+  );
+}
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
 
 export default function TabLayout() {
   return (
@@ -31,24 +48,42 @@ export default function TabLayout() {
           paddingBottom: 10,
         },
         tabBarActiveTintColor: "#FFFFFF",
+<<<<<<< HEAD
         headerShown: true,
         headerStyle: { backgroundColor: colorsIkam.rojo.backgroundColor },
         headerTitle: () => <LogoTitle />,
         headerTitleAlign: "center",
         headerTintColor: "white",
+=======
+        headerShown: true,        
+        headerStyle: { backgroundColor: colorsIkam.rojo.backgroundColor },
+          headerTitle: (props) => <LogoTitle {...props} />,
+          headerTitleAlign: "center",
+          headerTintColor: "white",
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
           title: "Inicio",
+<<<<<<< HEAD
           tabBarIcon: createTabBarIcon("home", "home-outline"),
+=======
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon
+              name={focused ? "home" : "home-outline"}
+              color={color}
+            />
+          ),
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
         }}
       />
       <Tabs.Screen
         name="favoritos"
         options={{
           title: "Favoritos",
+<<<<<<< HEAD
           tabBarIcon: createTabBarIcon("heart", "heart-outline"),
         }}
       />
@@ -57,13 +92,30 @@ export default function TabLayout() {
         options={{
           title: "Chat",
           tabBarIcon: createTabBarIcon("chatbubble-ellipses", "chatbubble-outline"),
+=======
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon
+              name={focused ? "heart" : "heart-outline"}
+              color={color}
+            />
+          ),
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
         }}
       />
       <Tabs.Screen
         name="perfil"
         options={{
           title: "Perfil",
+<<<<<<< HEAD
           tabBarIcon: createTabBarIcon("person", "person-outline"),
+=======
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon
+              name={focused ? "person" : "person-outline"}
+              color={color}
+            />
+          ),
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
         }}
       />
     </Tabs>
@@ -71,6 +123,14 @@ export default function TabLayout() {
 }
 
 const styles = StyleSheet.create({
+<<<<<<< HEAD
+=======
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
   image: {
     width: 50,
     height: 50,

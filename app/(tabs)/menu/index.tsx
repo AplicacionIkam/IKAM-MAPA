@@ -269,7 +269,11 @@ const App = () => {
             setbusquedaPyme={setBusquedaPyme}
             setModalVisible={setModalVisible}
           />          
+<<<<<<< HEAD
           {pymesQ.length > 0 ? (
+=======
+          {pymes.length > 0 ? (
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
             <ListaPymes
               setPymeSeleccionada={setPymeSeleccionada}
               pymesQ={pymesQ}
@@ -323,6 +327,7 @@ const estilos = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+<<<<<<< HEAD
     marginHorizontal: 20
   },
   mensajeNoPymes: {
@@ -330,6 +335,13 @@ const estilos = StyleSheet.create({
     textAlign: "center",
     fontSize: 24,
     fontWeight: "bold",
+=======
+  },
+  mensajeNoPymes: {
+    textAlign: "center",
+    fontSize: 25,
+    marginVertical: 20,
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
   },
   tarjeta: {
     borderWidth: 1,

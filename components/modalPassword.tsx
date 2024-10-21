@@ -85,7 +85,11 @@ const ModalPassword = ({ modalVisible, setModalVisible }) => {
               {({ pressed }) => (
                 <Icon
                   name="times"
+<<<<<<< HEAD
                   size={48}
+=======
+                  size={35}
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
                   color={pressed ? "blue" : "red"}
                   solid
                 />
@@ -169,7 +173,11 @@ const estilos = StyleSheet.create({
   },
   modalView: {
     width: "80%",
+<<<<<<< HEAD
     height: "51%",
+=======
+    height: "45%",
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
     backgroundColor: "white",
     borderRadius: 20,
     padding: 20,
@@ -242,7 +250,11 @@ const estilos = StyleSheet.create({
   },
   btnText: {
     fontSize: 15,
+<<<<<<< HEAD
     fontWeight: "900",
+=======
+    fontWeight: "600",
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
     color: "#fff",
   },
   imagenContenedor: {

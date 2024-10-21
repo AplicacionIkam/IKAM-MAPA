@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import {
   addDoc,
   collection,
@@ -11,12 +12,18 @@ import {
   Timestamp,
   where,
 } from "firebase/firestore";
+=======
+import { addDoc, collection, doc, getDoc, getDocs, onSnapshot, Timestamp } from "firebase/firestore";
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
 import { ikam } from "@/firebase/config-ikam";
 import { Pyme } from "@/models/Pyme";
 import { Categoria } from "@/models/Categoria";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+<<<<<<< HEAD
 import user from "@/app/configuracion/perfil";
 import { User } from "@/models/User";
+=======
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
 
 export const suscribirseAPymes = (callback: (pymes: Pyme[]) => void) => {
   try {
@@ -73,7 +80,11 @@ export const suscribirseAColonias = (callback: (colonias: any[]) => void) => {
         callback(coloniasArray);
       }
     );
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
     return unsubscribe; // Devuelve la función de limpieza para cancelar la suscripción
   } catch (error) {
     console.error("Error suscribiéndose a las colonias:", error);
@@ -93,18 +104,28 @@ export const obtenerDetallesPyme = async (pymeId: string) => {
 
 export const getQuestions = async () => {
   try {
+<<<<<<< HEAD
     const querySnapshot = await getDocs(collection(ikam, "preguntas"));
     const questions = querySnapshot.docs.map((doc) => ({
+=======
+    const querySnapshot = await getDocs(collection(ikam, 'preguntas'));
+    const questions = querySnapshot.docs.map(doc => ({
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
       id: doc.id,
       ...doc.data(),
     }));
     return questions;
   } catch (error) {
+<<<<<<< HEAD
     console.error("Error fetching questions:", error);
+=======
+    console.error('Error fetching questions:', error);
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
     return [];
   }
 };
 
+<<<<<<< HEAD
 export const subscribeToQuestions = (callback: any) => {
   try {
     const unsubscribe = onSnapshot(
@@ -121,10 +142,26 @@ export const subscribeToQuestions = (callback: any) => {
     return unsubscribe; // Devuelve la función de desuscripción
   } catch (error) {
     console.error("Error subscribing to questions:", error);
+=======
+export const subscribeToQuestions = (callback:any) => {
+  try {
+    const unsubscribe = onSnapshot(collection(ikam, 'preguntas'), (querySnapshot) => {
+      const questions = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      callback(questions);
+    });
+
+    return unsubscribe; // Devuelve la función de desuscripción
+  } catch (error) {
+    console.error('Error subscribing to questions:', error);
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
     return () => {}; // Retorna una función vacía en caso de error
   }
 };
 
+<<<<<<< HEAD
 export const preguntaDb = async (pregunta: any, correo: any) => {
   try {
     await addDoc(collection(ikam, "preguntas"), {
@@ -153,22 +190,62 @@ export const soporte = async (asunto: any, mensaje: any, correo: any) => {
 };
 
 export const listenToUserChanges = (userUID: any, setUserData: any) => {
+=======
+export const preguntaDb = async (pregunta:any, correo:any) => {
+  try {
+    await addDoc(collection(ikam, "preguntas"), {      
+      correo: correo,
+      pregunta: pregunta,      
+      created_time: Timestamp.now()
+    });
+    console.log('Documento agregado con éxito');
+  } catch (error) {
+    console.error('Error al agregar el documento:', error);
+  }
+};
+
+export const soporte = async (asunto:any, mensaje:any, correo:any) => {
+  try {
+    await addDoc(collection(ikam, "soporte"), {      
+      correo: correo,
+      asunto: asunto,
+      mensaje: mensaje,
+      created_time: Timestamp.now()
+    });
+    console.log('Documento agregado con éxito');
+  } catch (error) {
+    console.error('Error al agregar el documento:', error);
+  }
+};
+
+export const listenToUserChanges = (userUID:any, setUserData:any) => {
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
   const userDocRef = doc(ikam, "users", userUID);
 
   // Escuchar los cambios en el documento del usuario
   const unsubscribe = onSnapshot(userDocRef, async (docSnapshot) => {
     if (docSnapshot.exists()) {
       const userData = docSnapshot.data();
+<<<<<<< HEAD
       console.log("Datos del usuario actualizados:", userData);
 
       // Combinar el `uid` con los datos obtenidos del documento
       const combinedUserData = {
         ...userData, // Datos de Firestore
         uid: userUID, // Añadir el UID del usuario
+=======
+      console.log('Datos del usuario actualizados:', userData);
+
+      // Combinar el `uid` con los datos obtenidos del documento
+      const combinedUserData = {
+        ...userData,  // Datos de Firestore
+        uid: userUID  // Añadir el UID del usuario
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
       };
 
       // Guardar los datos actualizados en AsyncStorage
       try {
+<<<<<<< HEAD
         await AsyncStorage.setItem(
           "userData",
           JSON.stringify(combinedUserData)
@@ -176,18 +253,29 @@ export const listenToUserChanges = (userUID: any, setUserData: any) => {
         console.log("Datos del usuario guardados en AsyncStorage.");
       } catch (error) {
         console.error("Error al guardar los datos en AsyncStorage:", error);
+=======
+        await AsyncStorage.setItem('userData', JSON.stringify(combinedUserData));
+        console.log('Datos del usuario guardados en AsyncStorage.');
+      } catch (error) {
+        console.error('Error al guardar los datos en AsyncStorage:', error);
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
       }
 
       // Actualizar el estado local con los datos actualizados
       setUserData(combinedUserData);
     } else {
+<<<<<<< HEAD
       console.log("El documento del usuario no existe.");
+=======
+      console.log('El documento del usuario no existe.');
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
     }
   });
 
   // Retorna la función para cancelar la suscripción (desconectar la escucha)
   return unsubscribe;
 };
+<<<<<<< HEAD
 
 export const verificarYCrearChat = async (
   chatId: string,
@@ -337,3 +425,5 @@ export const suscribirseAUser = (callback: (user: User[]) => void) => {
     console.error("Error suscribiéndose a los usuarios:", error);
   }
 };
+=======
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e

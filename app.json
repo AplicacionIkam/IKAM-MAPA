@@ -2,7 +2,11 @@
   "expo": {
     "name": "Ikam-Multitiendas",
     "slug": "Ikam-Multitiendas",
+<<<<<<< HEAD
     "version": "2.0.2",
+=======
+    "version": "1.1.0",
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -14,19 +18,27 @@
     },
     "ios": {
       "supportsTablet": true,
+<<<<<<< HEAD
       "bundleIdentifier": "com.allsveam.IkamMultitiendas",
       "infoPlist": {
         "UIBackgroundModes": ["fetch", "remote-notification"]
       }
+=======
+      "bundleIdentifier": "com.allsveam.IkamMultitiendas"
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+<<<<<<< HEAD
       "package": "com.allsveam.IkamMultitiendas",
       "versionCode": 3,
       "permissions": ["NOTIFICATIONS"]
+=======
+      "package": "com.allsveam.IkamMultitiendas"
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
     },
     "web": {
       "bundler": "metro",

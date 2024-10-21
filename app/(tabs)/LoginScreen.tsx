@@ -1,7 +1,13 @@
 import { signInWithEmailAndPassword, signInAnonymously } from "firebase/auth";
+<<<<<<< HEAD
 import { doc, getDoc, updateDoc, arrayUnion } from "firebase/firestore";
 import { Link, useRouter } from "expo-router";
 import React, { useState, useEffect } from "react";
+=======
+import { doc, getDoc } from "firebase/firestore";
+import { Link, useRouter } from "expo-router";
+import React, { useState } from "react";
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
 import { FontAwesome5 } from "@expo/vector-icons";
 
 import {
@@ -24,9 +30,12 @@ import { auth, ikam } from "@/firebase/config-ikam";
 import { getUserData, saveUserData } from "@/auth/authService";
 import ModalPassword from "@/components/modalPassword";
 
+<<<<<<< HEAD
 import * as Notifications from "expo-notifications";
 import GetPushNotificationToken from "@/components/getToken";
 
+=======
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
 const Logo = require("@/assets/img/logo_ikam.png");
 
 const LoginScreen = () => {
@@ -39,6 +48,7 @@ const LoginScreen = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const [modalVisible, setModalVisible] = useState(false);
+<<<<<<< HEAD
   const [permissionGranted, setPermissionGranted] = useState(false);
   const [expoPushToken, setExpoPushToken] = useState("");
 
@@ -86,6 +96,8 @@ const LoginScreen = () => {
       console.log("No se encontraron datos del usuario.");
     }
   };
+=======
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
 
   const handleLogin = async () => {
     setLoading(true);
@@ -106,16 +118,28 @@ const LoginScreen = () => {
           ...userData, // Datos del documento de Firestore
           uid: user.uid, // Añadir el `uid` del objeto `user`
         };
+<<<<<<< HEAD
 
         await saveUserData(combinedUserData);
 
         // Limpiar formulario
+=======
+        
+        await saveUserData(combinedUserData);
+        
+        // await saveUserData(user);
+        // Combinar el `uid` de Firebase con los datos del documento de Firestore
+        // const savedUserData = await getUserData();
+        // console.log(savedUserData);
+
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
         setForm({
           email: "",
           password: "",
         });
         setShowPassword(false);
 
+<<<<<<< HEAD
         // Redirigir a la siguiente pantalla
         router.push({ pathname: "menu", params: { user: userData } });
 
@@ -126,6 +150,9 @@ const LoginScreen = () => {
         if (expoPushToken) {
           await updateUserPushTokens(user.uid, expoPushToken);
         }
+=======
+        router.push({ pathname: "menu", params: { user: userData } });
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
       } else {
         setErrorMessage("No se encontraron datos del usuario.");
       }
@@ -168,7 +195,11 @@ const LoginScreen = () => {
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
         <View style={styles.container}>
           <Image source={Logo} style={styles.logo} />
+<<<<<<< HEAD
           <Text style={styles.title}>Inicia Sesión</Text>
+=======
+          <Text style={styles.title}>Inicia sesión</Text>
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
 
           {loading ? (
             <ActivityIndicator size="large" color="#C61919" />
@@ -313,7 +344,11 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   formLink: {
+<<<<<<< HEAD
     fontSize: 17,
+=======
+    fontSize: 15,
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
     fontWeight: "600",
     color: "#222C57",
     marginBottom: 20,
@@ -335,7 +370,11 @@ const styles = StyleSheet.create({
   },
   btnText: {
     fontSize: 15,
+<<<<<<< HEAD
     fontWeight: "900",
+=======
+    fontWeight: "600",
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
     color: "#fff",
   },
   label: {

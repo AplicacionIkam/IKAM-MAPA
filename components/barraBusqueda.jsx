@@ -1,6 +1,10 @@
 import { FontAwesome5 } from "@expo/vector-icons";
 import React from "react";
+<<<<<<< HEAD
 import { TextInput, View, StyleSheet, Dimensions, Text } from "react-native";
+=======
+import { TextInput, View, StyleSheet, Dimensions } from "react-native";
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
 const { width: viewportWidth } = Dimensions.get("window");
 
 const BarraBusqueda = ({ busquedaPyme, setbusquedaPyme, setModalVisible }) => {

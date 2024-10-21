@@ -38,7 +38,10 @@ import { auth, ikam } from "@/firebase/config-ikam";
 import { deleteUser } from "firebase/auth";
 import { listenToUserChanges } from "@/services/services";
 import { User } from "@/models/User";
+<<<<<<< HEAD
 import colorsIkam from "@/assets/estilos";
+=======
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
 
 export default function App() {
   const router = useRouter();
@@ -67,7 +70,11 @@ export default function App() {
     };
 
     fetchUserData();
+<<<<<<< HEAD
   }, []);
+=======
+  }, []);  
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
 
   useEffect(() => {
     library.add(
@@ -193,12 +200,16 @@ export default function App() {
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.contenedorPerfil}>
         <View style={styles.contenedorPerfilColumnas}>
+<<<<<<< HEAD
           {/* <Icon name="user-circle" size={70} color="black" solid /> */}
           <View style={styles.circle}>
             <Text style={styles.text}>{userData.display_name.toUpperCase()[0] +
                 "" +
                 userData.last_name.toUpperCase()[0]}</Text>
           </View>
+=======
+          <Icon name="user-circle" size={70} color="black" solid />
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
           <View style={styles.textoPerfilContainer}>
             <Text style={styles.textoPerfil}>
               {userData.display_name.toUpperCase() +
@@ -211,6 +222,7 @@ export default function App() {
       </View>
       <ScrollView style={styles.contenedorOpciones}>
         <Link asChild href={"/configuracion/perfil"}>
+<<<<<<< HEAD
           <RenderOption icon="user" text="Datos de la cuenta" onPress={null} />
         </Link>
         <Link asChild href={"/configuracion/preguntas"}>
@@ -226,6 +238,15 @@ export default function App() {
             text="Contacto Ikam Multitiendas"
             onPress={null}
           />
+=======
+          <RenderOption icon="user" text="Datos de la cuenta" onPress={null}/>
+        </Link>
+        <Link asChild href={"/configuracion/preguntas"}>
+          <RenderOption icon="question" text="Preguntas Frecuentes" onPress={null}/>
+        </Link>
+        <Link asChild href={"/configuracion/contacto"}>
+          <RenderOption icon="id-card-alt" text="Contacto Ikam Multitiendas" onPress={null}/>
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
         </Link>
         <Text style={styles.textoSubTitulo}>Politica de ikam Multitiendas</Text>
         {/* <RenderOption
@@ -297,6 +318,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
+<<<<<<< HEAD
   circle: {
     width: 70,
     height: 70,
@@ -310,6 +332,8 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
   },
+=======
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
   textoPerfilContainer: {
     marginLeft: 20,
   },

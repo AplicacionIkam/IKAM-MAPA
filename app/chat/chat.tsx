@@ -1,6 +1,11 @@
 import { router, Stack, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
+<<<<<<< HEAD
+=======
+  FlatList,
+  Image,
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
   ScrollView,
   StyleSheet,
   Text,
@@ -8,6 +13,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+<<<<<<< HEAD
 import { Feather } from "@expo/vector-icons";
 import colorsIkam from "@/assets/estilos";
 import { getUserData } from "@/auth/authService";
@@ -135,6 +141,52 @@ const chatNuevo = () => {
   const formatearHora = (timestamp: any) => {
     const date = timestamp.toDate(); // Convertir el Timestamp a objeto Date
     return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }); // Formato de hora
+=======
+import { Entypo, Feather, Ionicons } from "@expo/vector-icons";
+import colorsIkam from "@/assets/estilos";
+type Mensaje = {
+  user: string;
+  mensaje: string;
+  time: string;
+};
+
+const chat = () => {
+  const item = useLocalSearchParams();
+  const [mensajes, setMensajes] = useState<Mensaje[]>([]);
+  const [mensaje, setMensaje] = useState("");
+  const user = "1";
+
+  const men = [
+    {
+      user: "1",
+      mensaje: " hola, buenas noches",
+      time: "10:30 pm",
+    },
+    { user: "2", mensaje: "hola, buenas noches", time: "10:32 pm" },
+    { user: "2", mensaje: "En que le puedo servir", time: "10:32 pm" },
+    { user: "1", mensaje: "Quisiera saber los costos", time: "10:33 pm" },
+    { user: "2", mensaje: "Le envio nuestra lista de precios", time: "10:32 pm" },
+    { user: "1", mensaje: "Gracias", time: "10:33 pm" },
+  ];
+
+  useEffect(() => {
+    setMensajes(men);
+  }, []);  
+
+  const verDetalle = (item: any) => {
+    // router.push({ pathname: "/list/[id]", params: item });
+  };
+
+  const enviarMesaje = () => {
+    if (mensaje == "") return;
+    // console.log(mensaje);
+    setMensajes((prevMensajes) => [
+      ...prevMensajes,
+      { user: "1", mensaje: mensaje, time: "10:50 pm" },
+    ]);
+
+    setMensaje("");
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
   };
 
   return (
@@ -142,6 +194,7 @@ const chatNuevo = () => {
       <Stack.Screen
         options={{
           headerStyle: { backgroundColor: colorsIkam.rojo.backgroundColor },
+<<<<<<< HEAD
           headerTitle: item.nombre ? item.nombre.toString() : "Sin nombre",
           headerTintColor: "white",
           headerBackTitle: "Volver",
@@ -169,12 +222,61 @@ const chatNuevo = () => {
                             <Text style={estilos.mensajeHora}>
                               {formatearHora(m.timestamp)}
                             </Text>
+=======
+          headerTitle: item.nombre_pyme.toString(),
+          headerTintColor: "white",
+          headerBackTitle: "Volver",
+          headerShown: true,
+          headerTitleAlign: "center",          
+        }}
+      />
+      {/* <Stack.Screen
+        options={{
+          headerStyle: { backgroundColor: "blue" },
+          headerTintColor: "white",
+          headerBackTitle: "Atras",
+          headerTitle: `${item.nombre}`,
+          headerTitleAlign: "center",
+          headerRight: () => (
+            <View>
+              {item?.img && typeof item.img === "string" && (
+                <TouchableOpacity onPress={() => verDetalle(item)}>
+                  <Image
+                    source={{ uri: item.img }}
+                    style={estilos.headerImage}
+                  />
+                </TouchableOpacity>
+              )}
+            </View>
+          ),
+        }}
+      /> */}
+      <View style={estilos.chatContainer}>
+        <ScrollView>
+          <View style={estilos.messagesContainer}>
+            <Text style={{ fontSize: 20, textAlign: "center", marginTop: 15 }}>
+              {item.img}
+            </Text>
+            {mensajes.length > 0 ? (
+              <View>
+                {mensajes.map((m, index) => (
+                  <View>
+                    {m.user == "1" ? (
+                      <View style={estilos.containerMensajeDerecha}>
+                        <View style={estilos.messageContainerDer}>
+                          <View key={index}>
+                            <Text style={estilos.mensajeTexto}>
+                              {m.mensaje}
+                            </Text>
+                            <Text style={estilos.mensajeHora}>{m.time}</Text>
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
                           </View>
                         </View>
                       </View>
                     ) : (
                       <View style={estilos.containerMensajeIzquierda}>
                         <View style={estilos.messageContainerIzq}>
+<<<<<<< HEAD
                           <View>
                             <Text style={estilos.mensajeTexto}>
                               {m.mensaje}
@@ -182,6 +284,13 @@ const chatNuevo = () => {
                             <Text style={estilos.mensajeHora}>
                               {formatearHora(m.timestamp)}
                             </Text>
+=======
+                          <View key={index}>
+                            <Text style={estilos.mensajeTexto}>
+                              {m.mensaje}
+                            </Text>
+                            <Text style={estilos.mensajeHora}>{m.time}</Text>
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
                           </View>
                         </View>
                       </View>
@@ -190,7 +299,13 @@ const chatNuevo = () => {
                 ))}
               </View>
             ) : (
+<<<<<<< HEAD
               <View>{/* <Text>No hay mensajes todavia</Text> */}</View>
+=======
+              <View>
+                <Text>No hay mensajes todavia</Text>
+              </View>
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
             )}
           </View>
         </ScrollView>
@@ -218,6 +333,14 @@ const estilos = StyleSheet.create({
     justifyContent: "space-between",
     backgroundColor: "#f5f5f5",
   },
+<<<<<<< HEAD
+=======
+  headerImage: {
+    height: 30,
+    width: 30,
+    borderRadius: 100,
+  },
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
   chatContainer: {
     flex: 1,
     justifyContent: "space-between",
@@ -292,4 +415,8 @@ const estilos = StyleSheet.create({
   },
 });
 
+<<<<<<< HEAD
 export default chatNuevo;
+=======
+export default chat;
+>>>>>>> 4adf141ae0548d8b6db8da031e0ebb2402f4f58e
